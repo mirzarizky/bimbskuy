@@ -28,10 +28,10 @@ class CreateMahasiswaTable extends Migration
             $table->string('judul');
             $table->string('nilai')->nullable()->default(null);                    // A|B|C|D|E nullable|default:null
             $table->string('berita_acara')->nullable()->default(null);                    // A|B|C|D|E nullable|default:null
-            $table->integer('kode_pembimbing');
-            $table->integer('kode_pembimbing_2')->nullable()->default(null);
-            $table->integer('kode_pembimbing_3')->nullable()->default(null);
-            $table->integer('kode_wali');
+            $table->unsignedInteger('kode_pembimbing');
+            $table->unsignedInteger('kode_pembimbing_2')->nullable()->default(null);
+            $table->unsignedInteger('kode_pembimbing_3')->nullable()->default(null);
+            $table->unsignedInteger('kode_wali');
             $table->unsignedInteger('departemen_id');
             $table->unsignedInteger('user_id')->nullable()->default(null);
             $table->timestamps();

@@ -36,4 +36,9 @@ class User extends Authenticatable
     public function roles() {
         return $this->belongsToMany(Role::class,'user_role');
     }
+
+    public function notifikasi()
+    {
+        return $this->hasMany(Notifikasi::class);
+    }
 }

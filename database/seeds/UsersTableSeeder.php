@@ -12,7 +12,9 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         // Admin
-        factory(App\User::class, 6)->create()->each(function ($user) {
+        factory(App\User::class, 6)->create([
+            'role_id' => 2,
+        ])->each(function ($user) {
             $user->roles()->save(\App\Role::where('id', 2)->first());
         });
     }
