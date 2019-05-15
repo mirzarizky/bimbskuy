@@ -15,11 +15,5 @@ class UsersTableSeeder extends Seeder
         factory(App\User::class, 6)->create()->each(function ($user) {
             $user->roles()->save(\App\Role::where('id', 2)->first());
         });
-
-        // Mahasiswa
-        factory(App\User::class, 50)->create()->each(function ($user) {
-            $user->roles()->save(\App\Role::where('id', 1)->first());
-        });
-
     }
 }

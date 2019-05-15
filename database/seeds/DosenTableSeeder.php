@@ -11,7 +11,7 @@ class DosenTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Dosen::class, 100)->create()->each(function ($dosen) {
+        factory(App\Dosen::class, 50)->create()->each(function ($dosen) {
 
             $user = factory(App\User::class)->create([
                 'name' => $dosen->nama,

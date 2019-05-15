@@ -24,4 +24,12 @@ class Dosen extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function mahasiswaPembimbingan() {
+        return $this->hasMany(Mahasiswa::class, 'kode_pembimbing', 'kode_bimbing');
+    }
+
+    public function mahasiswaPerwalian() {
+        return $this->hasMany(Mahasiswa::class, 'kode_wali', 'kode_wali');
+    }
 }
