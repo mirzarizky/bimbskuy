@@ -32,4 +32,12 @@ class Dosen extends Model
     public function mahasiswaPerwalian() {
         return $this->hasMany(Mahasiswa::class, 'kode_wali', 'kode_wali');
     }
+
+    public function isInDepartemen($departemen_id) {
+        if($departemen_id == $this->departemen_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
