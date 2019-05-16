@@ -21,8 +21,9 @@ class MahasiswaTableSeeder extends Seeder
 
             ])->each(function ($mhs) {
                 $newUser = factory(App\User::class)->create([
-                    'name'  => $mhs->nama,
-                    'email' => $mhs->email
+                    'name'      => $mhs->nama,
+                    'email'     => $mhs->email,
+                    'role_id'   => 1
                 ]);
 
                 $newUser->roles()->save(\App\Role::where('id', 1)->first());

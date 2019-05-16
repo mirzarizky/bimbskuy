@@ -18,19 +18,15 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
             'remember_me' => 'nullable|boolean' // TODO: remember me feature
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
         if(!User::where('email', $request->email)->first()) {
             return response()->json([
-                'error' => 'These credentials do not match our records.'
+                'message' => 'These credentials do not match our records.'
             ], 401);
         }
 

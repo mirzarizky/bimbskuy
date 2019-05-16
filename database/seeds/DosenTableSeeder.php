@@ -14,7 +14,8 @@ class DosenTableSeeder extends Seeder
         factory(App\Dosen::class, 50)->create()->each(function ($dosen) {
 
             $user = factory(App\User::class)->create([
-                'name' => $dosen->nama,
+                'name'      => $dosen->nama,
+                'role_id'   => 3,
             ]);
 
             $user->roles()->saveMany([
