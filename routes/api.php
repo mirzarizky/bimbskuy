@@ -22,4 +22,7 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::post('approve/{id}', 'DosenController@approveMahasiswa');
+});
 Route::post('register', 'MahasiswaController@register');

@@ -45,4 +45,18 @@ class Mahasiswa extends Model
     public function dosenPembimbing() {
         return $this->belongsTo(Dosen::class, 'kode_pembimbing', 'kode_bimbing');
     }
+
+    /**
+     * Cek apakah pembimbing utamanya adalah benar pembimbingnya
+     *
+     * @param $kode_bimbing
+     * @return bool
+     */
+    public function isPembimbing($kode_bimbing) {
+        if($kode_bimbing == $this->kode_pembimbing) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
