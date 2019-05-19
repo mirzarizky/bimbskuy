@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Mahasiswa extends Model
 {
+    use Notifiable;
+
     protected $table = 'mahasiswa';
 
     protected $fillable = [
@@ -58,5 +61,33 @@ class Mahasiswa extends Model
         } else {
             return false;
         }
+    }
+
+    /**
+     * Fungsi helper untuk return tipe bimbingann
+     *
+     * @return string|null
+     *
+     */
+    public function jenisBimbingan() {
+        switch ($this->tipe_bimbingan) {
+            case 1: return 'skripsi';
+            break;
+            case 2: return 'pkl';
+            break;
+            default: return null;
+            break;
+        }
+    }
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForMail($notification)
+    {
+        return $this->email;
     }
 }

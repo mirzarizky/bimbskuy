@@ -25,4 +25,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['middleware' => 'auth:api'], function() {
     Route::post('approve/{id}', 'DosenController@approveMahasiswa');
 });
+
 Route::post('register', 'MahasiswaController@register');
+Route::get('departemen', 'DepartemenController@getAllDepartemen');
+Route::get('dosen/{id}/departemen', 'DepartemenController@getDosenByDepartemenId');

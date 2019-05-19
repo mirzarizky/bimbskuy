@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dosen;
 use App\Mahasiswa;
+use App\Notifications\MahasiswaApproved;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
@@ -49,6 +50,8 @@ class DosenController extends Controller
                 $mahasiswa->user_id = $newUser->id;
                 $mahasiswa->save();
             }
+
+            $newUser->notify(new MahasiswaApproved($newUser));
 
 //            TODO: notify mahasiswa
 

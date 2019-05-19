@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Departemen;
 use App\Dosen;
 use App\Mahasiswa;
+use App\Notifications\MahasiswaRegistered;
+use App\Notifications\MahasiswaRegistration;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 
@@ -26,8 +30,8 @@ class MahasiswaController extends Controller
             'alamat_ortu'       => 'required|string|max:255',
 
             // file upload
-            'foto'              => 'required|image|max:500',
-            'krs'               => 'required|file|max:500',
+            'foto'              => 'nullable|image|max:500',
+            'krs'               => 'nullable|file|max:500',
 
             // judul skripsi/pkl
             'tipe_bimbingan'    => 'required|numeric', // 1|2; skripsi|pkl
@@ -91,7 +95,7 @@ class MahasiswaController extends Controller
         ])->first();
 
         if(!$mahasiswa) {
-            Mahasiswa::create([
+            $mahasiswa = Mahasiswa::create([
                 'nim'               => $request->nim,
                 'nama'              => $request->nama,
                 'email'             => $request->email,
@@ -117,12 +121,21 @@ class MahasiswaController extends Controller
                 'kode_pembimbing_2' => ($request->kode_pembimbing_2 ? $request->kode_pembimbing_2 : null),
                 'kode_pembimbing_3' => ($request->kode_pembimbing_3 ? $request->kode_pembimbing_3 : null),
             ]);
+
+            User::find($dosbing->user_id)->notify(new MahasiswaRegistered($mahasiswa));
+
+            if($dosbing2) {
+                User::find($dosbing2->user_id)->notify(new MahasiswaRegistered($mahasiswa, 2));
+            }
+
+            if($dosbing3) {
+                User::find($dosbing3->user_id)->notify(new MahasiswaRegistered($mahasiswa, 3));
+            }
+
+            Notification::send($mahasiswa, new MahasiswaRegistration($mahasiswa));
         } else {
             return response()->json(['message' => 'Mahasiswa dengan nim telah terdaftar'], 422);
         }
-
-//        TODO: email ke mahasiswa berhasil terdaftar untuk selanjutnya nunggu diapprove dosen
-//        TODO: notifikasi dosen pembimbing=> Mahasiswa ini daftar bimbingan (acc dong!)
 
         return response()->json(['message' => 'Berhasil terdaftar.']);
     }

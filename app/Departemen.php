@@ -9,4 +9,9 @@ class Departemen extends Model
     protected $table = 'departemen';
 
     protected $fillable = ['nama'];
+
+    public function dosen()
+    {
+        return $this->hasMany(Dosen::class);
+    }
 }

@@ -37,8 +37,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class,'user_role');
     }
 
-    public function notifikasi()
+    public function routeNotificationForOneSignal()
     {
-        return $this->hasMany(Notifikasi::class);
+        return ['include_external_user_ids' => [$this->id]];
     }
 }
