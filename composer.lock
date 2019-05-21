@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb2a60142591be2d6ab8c4d164ad4666",
+    "content-hash": "b427e061d8ff327f14aadd48cdac2df3",
     "packages": [
         {
             "name": "berkayk/onesignal-laravel",
@@ -807,16 +807,16 @@
         },
         {
             "name": "laravel-notification-channels/onesignal",
-            "version": "1.2.0",
+            "version": "v2.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-notification-channels/onesignal.git",
-                "reference": "aaae22ff27a8009ffe302105691b90f962ace5db"
+                "reference": "0c3013b1f3d6006aee706d4fc2813aae42989724"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-notification-channels/onesignal/zipball/aaae22ff27a8009ffe302105691b90f962ace5db",
-                "reference": "aaae22ff27a8009ffe302105691b90f962ace5db",
+                "url": "https://api.github.com/repos/laravel-notification-channels/onesignal/zipball/0c3013b1f3d6006aee706d4fc2813aae42989724",
+                "reference": "0c3013b1f3d6006aee706d4fc2813aae42989724",
                 "shasum": ""
             },
             "require": {
@@ -871,7 +871,7 @@
             ],
             "description": "OneSignal Notifications driver",
             "homepage": "https://github.com/laravel-notification-channels/onesignal",
-            "time": "2018-03-09T07:12:22+00:00"
+            "time": "2019-01-03T14:23:54+00:00"
         },
         {
             "name": "laravel/framework",

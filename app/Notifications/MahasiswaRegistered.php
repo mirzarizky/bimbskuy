@@ -6,9 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\OneSignal\OneSignalChannel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Str;
+use NotificationChannels\OneSignal\OneSignalMessage;
 
 class MahasiswaRegistered extends Notification
 {
@@ -38,7 +40,8 @@ class MahasiswaRegistered extends Notification
     {
         return [
             'broadcast',
-            'database'
+            'database', 
+            OneSignalChannel::class
         ];
     }
 
@@ -96,5 +99,16 @@ class MahasiswaRegistered extends Notification
             'mahasiswa_id'  => $this->mahasiswa->id,
             'url'           => url('mahasiswa/'.$this->mahasiswa->id),
         ];
+    }
+
+    public function toOneSignal($notifiable)
+    {
+        $data = ['abc' => '123', 'foo' => 'bar'];
+
+        return OneSignalMessage::create()
+            ->setSubject($this->mahasiswa->nama.' mendaftarkan anda sebagai Dosen Pembimbing')
+            ->setBody("Klik untuk lebih lanjut.")
+            ->setParameter('android_group', 'mahasiswa_registration')
+            ->setData('data', $data);
     }
 }
