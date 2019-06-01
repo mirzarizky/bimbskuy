@@ -1,22 +1,19 @@
 module.exports = {
-    root: true,
-    parserOptions: {
-        parser: "babel-eslint",
-        ecmaVersion: 2016,
-        sourceType: 'module'
-    },
-    plugins: [
-      'vue'
-    ],
-    env: {
-        browser: true,
-    },
-    extends: [
-        "eslint:recommended",
-        "plugin:vue/recommended"
-    ],
-    rules: {
-        'generator-star-spacing': 'off',
-        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-    }
-}
+  root: true,
+  parserOptions: {
+    parser: "babel-eslint",
+    ecmaVersion: 6,
+    sourceType: "module",
+  },
+  plugins: ["vue"],
+  env: {
+    browser: true,
+  },
+  extends: ["eslint:recommended", "plugin:vue/recommended", "prettier"],
+  rules: {
+    "generator-star-spacing": "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
+    "vue/max-attributes-per-line": "off",
+  },
+};

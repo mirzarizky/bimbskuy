@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +11,20 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+mix
+  .js("resources/js/app.js", "public/js")
+  .sass("resources/sass/app.scss", "public/css");
+
+mix.webpackConfig({
+  resolve: {
+    alias: {
+      "@": __dirname + "/resources/js"
+    }
+  }
+});
+
+if (!mix.inProduction()) {
+  mix.browserSync({
+    proxy: "localhost:8000"
+  });
+}

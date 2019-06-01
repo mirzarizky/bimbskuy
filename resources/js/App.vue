@@ -1,29 +1,25 @@
 <template>
-  <v-app>
-    <app-toolbar />
-    <v-content>
-      <v-container fluid>
-        <img
-          alt="logo"
-          width="25%"
-          src="./assets/logo.png"
-        >
-      </v-container>
-    </v-content>
-    <app-footer />
-  </v-app>
+  <div>
+    <template v-if="!$route.meta.public">
+      <app-layout />
+    </template>
+    <template v-else>
+      <transition>
+        <keep-alive>
+          <router-view />
+        </keep-alive>
+      </transition>
+    </template>
+  </div>
 </template>
 
 <script>
-    import toolbar from './components/Toolbar'
-    import footer from './components/Footer.vue'
+  import appLayout from "@/layouts/App.vue"
 
-    export default {
-        name: "App",
-        components: {
-            appToolbar: toolbar,
-            appFooter: footer
-        }
-    };
+  export default {
+      name: "App",
+      components: {
+        appLayout
+      }
+  };
 </script>
-
