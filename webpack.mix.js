@@ -18,13 +18,13 @@ mix
 mix.webpackConfig({
   resolve: {
     alias: {
-      "@": __dirname + "/resources/js"
-    }
-  }
+      "@": __dirname + "/resources/js",
+    },
+  },
 });
 
 if (!mix.inProduction()) {
   mix.browserSync({
-    proxy: "localhost:8000"
+    proxy: "localhost:8000",
   });
 }

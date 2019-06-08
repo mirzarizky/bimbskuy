@@ -43,5 +43,8 @@ export default {
   components: {
     appLayout,
   },
+  data: () => ({
+
+  }),
 };
 </script>

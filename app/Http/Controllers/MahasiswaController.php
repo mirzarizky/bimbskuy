@@ -20,7 +20,7 @@ class MahasiswaController extends Controller
         $request->validate([
             // mahasiswa
             'nim'               => 'required|string|min:14|max:14',
-            'nama'              => 'required|string|max:14',
+            'nama'              => 'required|string|max:35',
             'email'             => 'required|string|email',
             'hp_mahasiswa'      => 'required|numeric|digits_between:10,15',
             'alamat_kos'        => 'required|string|max:255',
@@ -124,11 +124,11 @@ class MahasiswaController extends Controller
 
             User::find($dosbing->user_id)->notify(new MahasiswaRegistered($mahasiswa));
 
-            if($dosbing2) {
+            if(!empty($dosbing2)) {
                 User::find($dosbing2->user_id)->notify(new MahasiswaRegistered($mahasiswa, 2));
             }
 
-            if($dosbing3) {
+            if(!empty($dosbing2)) {
                 User::find($dosbing3->user_id)->notify(new MahasiswaRegistered($mahasiswa, 3));
             }
 
