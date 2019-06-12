@@ -19,8 +19,8 @@ class MahasiswaController extends Controller
     {
         $request->validate([
             // mahasiswa
-            'nim'               => 'required|string|min:14|max:14',
-            'nama'              => 'required|string|max:35',
+            'nim'               => 'required|string|min:14|max:15',
+            'nama'              => 'required|string|max:100',
             'email'             => 'required|string|email',
             'hp_mahasiswa'      => 'required|numeric|digits_between:10,15',
             'alamat_kos'        => 'required|string|max:255',

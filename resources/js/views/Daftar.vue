@@ -15,12 +15,27 @@
                   <v-card flat>
                     <v-layout row wrap justify-space-between>
                       <v-flex xs12 sm12 px-3>
-                        <v-text-field v-model="nama" label="Nama Lengkap" />
+                        <v-text-field
+                          v-model="nama"
+                          v-validate="'required|max:100'"
+                          name="nama"
+                          box
+                          data-vv-name="nama lengkap"
+                          :error-messages="errors.collect('step1.nama lengkap')"
+                          data-vv-scope="step1"
+                          label="Nama Lengkap"
+                          required
+                          validate-on-blur
+                        />
                       </v-flex>
                       <v-flex xs12 sm6 px-3>
                         <v-text-field
                           v-model="email"
                           v-validate="'required|email'"
+                          data-vv-name="email"
+                          :error-messages="errors.collect('step1.email')"
+                          data-vv-scope="step1"
+                          box
                           type="email"
                           name="email"
                           label="Alamat Email"
@@ -30,45 +45,79 @@
                       <v-flex xs12 sm6 px-3>
                         <v-text-field
                           v-model="hp_mahasiswa"
+                          v-validate="'required|numeric|max:15|min:11'"
+                          data-vv-name="nomor telepon"
+                          :error-messages="errors.collect('step1.nomor telepon')"
+                          data-vv-scope="step1"
+                          box
                           label="Nomor Telepon"
                           prefix="+62"
+                          required
                         />
                       </v-flex>
                       <v-flex xs12 sm6 px-3>
-                        <v-text-field v-model="nim" label="NIM" />
+                        <v-text-field
+                          v-model="nim"
+                          v-validate="'required|numeric|max:15|min:14'"
+                          data-vv-name="nim"
+                          :error-messages="errors.collect('step1.nim')"
+                          data-vv-scope="step1"
+                          box
+                          label="NIM"
+                          required
+                        />
                       </v-flex>
                       <v-flex xs12 sm6 px-3>
                         <v-text-field
                           v-model="hp_ortu"
+                          v-validate="'required|numeric|max:15|min:11'"
+                          data-vv-name="nomor telepon orang tua"
+                          :error-messages="errors.collect('step1.nomor telepon orang tua')"
+                          data-vv-scope="step1"
+                          box
                           label="Nomor Telepon Orang Tua"
                           prefix="+62"
+                          required
                         />
                       </v-flex>
                       <v-flex xs12 sm12 px-3>
                         <v-textarea
                           v-model="alamat_kos"
+                          v-validate="'required|max:255'"
                           auto-grow
+                          box
+                          data-vv-name="alamat tinggal"
+                          :error-messages="errors.collect('step1.alamat tinggal')"
+                          data-vv-scope="step1"
                           label="Alamat Tinggal"
                           rows="2"
+                          required
                         />
                       </v-flex>
                       <v-flex xs12 sm12 px-3 mb-1>
                         <v-textarea
                           v-model="alamat_ortu"
+                          v-validate="'required|max:255'"
                           auto-grow
+                          box
+                          data-vv-name="alamat tinggal orang tua"
+                          :error-messages="errors.collect('step1.alamat tinggal orang tua')"
+                          data-vv-scope="step1"
                           label="Alamat Tinggal Orang Tua"
                           rows="1"
                           :disabled="sameAsAlamat"
+                          required
                         />
                         <v-switch
                           v-model="sameAsAlamat"
                           class="mt-1 pt-1"
                           label="Sama dengan Alamat Tinggal"
+                          required
                         />
                       </v-flex>
                     </v-layout>
                     <v-card-actions>
-                      <v-btn color="primary" @click="currentStep = 2">
+                      <v-btn color="primary" @click="validateStep('step1')">
                         Continue
                       </v-btn>
                     </v-card-actions>
@@ -80,7 +129,6 @@
                   <small>Skripsi atau PKL</small>
                 </v-stepper-step>
 
-
                 <v-stepper-content step="2">
                   <v-card flat>
                     <v-layout row wrap justify-center>
@@ -91,7 +139,7 @@
                               done
                             </v-icon>
                           </template>
-                          <v-btn depressed large :outline="showBadges.skripsi" @click="selectBimbingan(1)">
+                          <v-btn block depressed large :outline="showBadges.skripsi" @click="selectBimbingan(1)">
                             Skripsi
                           </v-btn>
                         </v-badge>
@@ -101,7 +149,7 @@
                               done
                             </v-icon>
                           </template>
-                          <v-btn depressed large :outline="showBadges.pkl" @click="selectBimbingan(2)">
+                          <v-btn block depressed large :outline="showBadges.pkl" @click="selectBimbingan(2)">
                             PKL
                           </v-btn>
                         </v-badge>
@@ -293,7 +341,7 @@
       RegistrationUploadForm
     },
     data: () => ({
-      currentStep: 3,
+      currentStep: 1,
       sameAsAlamat: false,
       nama: "",
       email: "",
@@ -344,7 +392,7 @@
     },
     created() {
       this.getAllDepartemen();
-      console.log(this.$refs.pond)
+      // console.log(this.$refs.pond)
     },
     methods: {
       selectBimbingan: function(tipe) {
@@ -416,7 +464,13 @@
         this.selectedDosenPembimbing2 = "";
         this.selectedDosenPembimbing3 = "";
       },
-
+      validateStep: function(scope) {
+        this.$validator.validateAll(scope).then(result => {
+          if (result) {
+            this.currentStep++;
+          }
+        });
+      }
     },
   };
 </script>
