@@ -3,13 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Notifications\VerifyMail;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    protected function appUrl()
+    {
+        return config('app.web_url');
+    }
+
+    public function __construct()
+    {
+        $this->middleware('signed')->only('verify');
+        $this->middleware('throttle:6,1')->only('verify', 'resend');
+    }
+
     /**
      *
      * @param Request $request
@@ -26,9 +40,16 @@ class AuthController extends Controller
 
         if(!User::where('email', $request->email)->first()) {
             return response()->json([
-                'message' => 'These credentials do not match our records.'
+                'error' => 'These credentials do not match our records.'
             ], 401);
         }
+
+        if(!User::where('email', $request->email)->first()->hasVerifiedEmail()) {
+            return response()->json([
+                'error' => 'Email Anda belum diverifikasi.'
+            ], 401);
+        }
+
 
         $credentials = request(['email', 'password']);
 
@@ -63,6 +84,67 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Successfully logged out'
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email',
+            'password' => 'required|string|confirmed',
+            'password_confirmation' => 'required|string'
+        ]);
+
+        if(User::where('email', $request->email)->first()) {
+            return response()->json([
+                'message' => 'Email telah terdaftar.'
+            ], 401);
+        }
+
+        else {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+            $user->notify(new VerifyMail());
+
+            return response()->json([
+                'message' => 'Akun berhasil dibuat.',
+                'id' => $user->id
+            ]);
+        }
+    }
+
+    public function verify(Request $request)
+    {
+        $id = $request->route('id');
+        $user = User::findOrFail($id);
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect($this->appUrl());
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($request->user()));
+        }
+        return redirect($this->appUrl().'/login?verified=1');
+    }
+
+    public function resend(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->hasVerifiedEmail()) {
+            return response()->json([
+                'message' => 'Email sudah diverifikasi.'
+            ], 401);
+        }
+
+        $user->notify(new VerifyMail());
+
+        return response()->json(["message" => "ok"]);
     }
 
     public function getUser(Request $request)

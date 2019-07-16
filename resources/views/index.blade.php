@@ -15,6 +15,6 @@
             <strong>We're sorry but {{ config('app.name') }} doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
         </noscript>
         <div id="app"></div>
-        <script src="{{ mix('js/app.js') }}"></script>
+        {{--<script src="{{ mix('js/app.js') }}"></script>--}}
     </body>
 </html>

@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
+    Route::post('register', 'AuthController@register');
+    Route::post('resend/{id}', 'AuthController@resend');
 
     Route::group(['middleware' => 'auth:api'], function() {
         Route::post('logout', 'AuthController@logout');

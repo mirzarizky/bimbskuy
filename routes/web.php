@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/{any}', function () {
-    return view('index');
-})->where('any', '.*');
+Route::get('mail/verify/{id}', 'AuthController@verify')->name('mail.verify')->middleware('signed');;
