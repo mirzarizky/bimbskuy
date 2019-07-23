@@ -30,8 +30,8 @@ class MahasiswaController extends Controller
             'alamat_ortu'       => 'required|string|max:255',
 
             // file upload
-            'foto'              => 'nullable|image|max:500',
-            'krs'               => 'nullable|file|max:500',
+            'foto'              => 'required|image|max:500',
+            'krs'               => 'required|max:500',
 
             // judul skripsi/pkl
             'tipe_bimbingan'    => 'required|numeric', // 1|2; skripsi|pkl
@@ -107,8 +107,8 @@ class MahasiswaController extends Controller
                 'alamat_ortu'       => $request->alamat_kos,
 
                 // file upload
-                'foto'              => $request->file('foto')->store('foto', 'public'),
-                'krs'               => $request->file('krs')->store('krs'),
+                'foto'              => $request->file('foto') ? $request->file('foto')->store('foto', 'public') : "",
+                'krs'               => $request->file('krs') ? $request->file('krs')->store('krs') : "",
 
                 // judul skripsi/pkl
                 'tipe_bimbingan'    => $request->tipe_bimbingan, // 1|2; skripsi|pkl
@@ -124,15 +124,15 @@ class MahasiswaController extends Controller
 
             User::find($dosbing->user_id)->notify(new MahasiswaRegistered($mahasiswa));
 
-            if(!empty($dosbing2)) {
-                User::find($dosbing2->user_id)->notify(new MahasiswaRegistered($mahasiswa, 2));
-            }
+            // if(!empty($dosbing2)) {
+            //     User::find($dosbing2->user_id)->notify(new MahasiswaRegistered($mahasiswa, 2));
+            // }
 
-            if(!empty($dosbing2)) {
-                User::find($dosbing3->user_id)->notify(new MahasiswaRegistered($mahasiswa, 3));
-            }
+            // if(!empty($dosbing2)) {
+            //     User::find($dosbing3->user_id)->notify(new MahasiswaRegistered($mahasiswa, 3));
+            // }
 
-            Notification::send($mahasiswa, new MahasiswaRegistration($mahasiswa));
+            // Notification::send($mahasiswa, new MahasiswaRegistration($mahasiswa));
         } else {
             return response()->json(['message' => 'Mahasiswa dengan nim telah terdaftar'], 422);
         }

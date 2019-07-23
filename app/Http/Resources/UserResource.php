@@ -20,8 +20,7 @@ class UserResource extends JsonResource
             'avatar'            => $this->avatar,
             'email_verified_at' => $this->email_verified_at,
             'activated_at'      => $this->activated_at,
-            'role'              => RoleResource::make($this->role),
-            'roles'             => RoleResource::collection($this->roles)
+            'role'              => $this->role->name
         ];
     }
 }

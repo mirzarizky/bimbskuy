@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
 use App\Notifications\VerifyMail;
 use App\User;
@@ -68,6 +69,7 @@ class AuthController extends Controller
             'access_token' => $tokenResult->accessToken,
             'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString(),
             'user' => new UserResource($user),
+            'roles' => RoleResource::collection($user->roles)
         ]);
     }
 
@@ -106,7 +108,9 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'role_id' => 1
             ]);
+            $user->roles()->save(\App\Role::where('id', 1)->first());
 
             $user->notify(new VerifyMail());
 
