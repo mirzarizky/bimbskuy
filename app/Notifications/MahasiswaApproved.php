@@ -2,25 +2,28 @@
 
 namespace App\Notifications;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\HtmlString;
 
 class MahasiswaApproved extends Notification
 {
     use Queueable;
 
-    protected $user;
+    protected $mahasiswa;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($mahasiswa)
     {
-        $this->user = $user;
+        $this->mahasiswa = $mahasiswa;
     }
 
     /**
@@ -43,10 +46,12 @@ class MahasiswaApproved extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hello '.$this->user->name.'!')
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('Buat Password Baru Anda')
+            ->greeting('Halo '.$this->mahasiswa->nama.'!')
+            ->line('Terimakasih telah melakukan pendaftaran '.$this->mahasiswa->jenisBimbingan().' di '.config('app.name').'. Silahkan 
+            klik tombol di bawah ini untuk membuat password baru:')
+            ->action('Buat Password Baru', $this->makeNewPasswordUrl($notifiable))
+            ->salutation(new HtmlString("Terimakasih,<br>".config('app.name')));
     }
 
     /**
@@ -60,5 +65,12 @@ class MahasiswaApproved extends Notification
         return [
             //
         ];
+    }
+
+    public function makeNewPasswordUrl($notifiable)
+    {
+        return URL::temporarySignedRoute(
+            'password.new', Carbon::now()->addDays(3), ['id' => $notifiable->getKey()]
+        );
     }
 }

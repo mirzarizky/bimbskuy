@@ -49,6 +49,14 @@ class Mahasiswa extends Model
         return $this->belongsTo(Dosen::class, 'kode_pembimbing', 'kode_bimbing');
     }
 
+    public function dosenPembimbing2() {
+        return $this->belongsTo(Dosen::class, 'kode_pembimbing_2', 'kode_bimbing');
+    }
+
+    public function dosenPembimbing3() {
+        return $this->belongsTo(Dosen::class, 'kode_pembimbing_3', 'kode_bimbing');
+    }
+
     /**
      * Cek apakah pembimbing utamanya adalah benar pembimbingnya
      *
@@ -71,9 +79,9 @@ class Mahasiswa extends Model
      */
     public function jenisBimbingan() {
         switch ($this->tipe_bimbingan) {
-            case 1: return 'skripsi';
+            case 1: return 'Tugas Akhir';
             break;
-            case 2: return 'pkl';
+            case 2: return 'PKL';
             break;
             default: return null;
             break;

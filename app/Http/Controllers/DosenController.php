@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dosen;
+use App\Http\Resources\MahasiswaResource;
 use App\Mahasiswa;
 use App\Notifications\MahasiswaApproved;
 use App\Role;
@@ -40,7 +41,7 @@ class DosenController extends Controller
                 $role_mahasiswa = Role::where('name', 'mahasiswa')->first();
 
                 $newUser = User::create([
-                   'name'       => $mahasiswa->nama,
+                    'name'       => $mahasiswa->nama,
                     'email'     => $mahasiswa->email,
                     'avatar'    => $mahasiswa->foto,
                     'role_id'   => $role_mahasiswa->id
@@ -51,11 +52,23 @@ class DosenController extends Controller
                 $mahasiswa->save();
             }
 
-            $newUser->notify(new MahasiswaApproved($newUser));
+            $newUser->notify(new MahasiswaApproved($mahasiswa));
 
 //            TODO: notify mahasiswa
 
             return response()->json(['message' => 'User successfully created']);
         }
+    }
+
+    public function getAwaitedMahasiswa(Request $request)
+    {
+        $dosen = Dosen::where('user_id', $request->user()->id)->first();
+
+        $mahasiswa = Mahasiswa::where([
+            'kode_pembimbing' => $dosen->kode_bimbing,
+            'user_id' => null
+        ])->get();
+
+        return response()->json(['mahasiswa' => MahasiswaResource::collection($mahasiswa)]);
     }
 }

@@ -155,6 +155,9 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        return response()->json(new UserResource($user));
+        return response()->json([
+            'user' => new UserResource($user),
+            'roles' => RoleResource::collection($user->roles)
+        ]);
     }
 }

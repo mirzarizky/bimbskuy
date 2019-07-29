@@ -12,3 +12,4 @@
 */
 
 Route::get('mail/verify/{id}', 'AuthController@verify')->name('mail.verify')->middleware('signed');;
+Route::get('password/new/{id}', 'MahasiswaController@makeNewPassword')->name('password.new')->middleware('signed');;
