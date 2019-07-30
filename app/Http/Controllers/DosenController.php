@@ -9,6 +9,7 @@ use App\Notifications\MahasiswaApproved;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DosenController extends Controller
 {
@@ -50,14 +51,39 @@ class DosenController extends Controller
 
                 $mahasiswa->user_id = $newUser->id;
                 $mahasiswa->save();
+
+                $newUser->notify(new MahasiswaApproved($mahasiswa));
             }
 
-            $newUser->notify(new MahasiswaApproved($mahasiswa));
 
 //            TODO: notify mahasiswa
 
-            return response()->json(['message' => 'User successfully created']);
+            return response()->json(['message' => 'Mahasiswa berhasil diverifikasi.']);
         }
+    }
+
+    // delete registrasi mahasiswa
+    public function deleteMahasiswa(Request $request, $id)
+    {
+        $mahasiswa = Mahasiswa::find($id);
+        $currentDosen = Dosen::where('user_id', $request->user()->id)->first();
+
+        if(!$mahasiswa->isPembimbing($currentDosen->kode_bimbing)) {
+            return response()->json([
+                'message' => 'Hanya dosen pembimbing utama yang dapat menghapus registarsi mahasiswa.'
+            ], 422);
+        }
+        else {
+            if (Storage::exists($mahasiswa->krs)) {
+                Storage::delete([
+                    $mahasiswa->foto,
+                    $mahasiswa->krs,
+                ]);
+            }
+            $mahasiswa->delete();
+            return response()->json(['message' => 'Mahasiswa berhasil dihapus.']);
+        }
+
     }
 
     public function getAwaitedMahasiswa(Request $request)

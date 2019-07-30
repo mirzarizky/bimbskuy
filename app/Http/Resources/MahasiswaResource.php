@@ -24,7 +24,7 @@ class MahasiswaResource extends JsonResource
             'hp_ortu' => $this->hp_ortu,
             'hp_mahasiswa' => $this->hp_mahasiswa,
             'email' => $this->email,
-            'foto' => $this->foto,
+            'foto' => url("storage/".$this->foto),
             'krs' => $this->krs,
             'tipe_bimbingan' => $this->tipe_bimbingan,       // 1|2 ; skripsi|pkl
             'judul' => $this->judul,                // judul skripsi/pkl
