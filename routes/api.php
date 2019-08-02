@@ -25,6 +25,11 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'auth:api'], function() {
+
+    Route::prefix('user')->group(function () {
+        Route::get('notifications', 'UserController@getNotifications');
+    });
+
     Route::post('approve/{id}', 'DosenController@approveMahasiswa');
     Route::delete('delete/{id}', 'DosenController@deleteMahasiswa');
     Route::get('awaited_mahasiswa', 'DosenController@getAwaitedMahasiswa');
